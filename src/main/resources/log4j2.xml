@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" monitorInterval="30">
+  <Properties>
+    <Property name="LOG_PATH" value="logs"/>
+    <Property name="LOG_ARCHIVE" value="${LOG_PATH}/archive"/>
+    <Property name="LOG_PATTERN">
+      %d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --- [%15.15t] %-40.40c{1.} -%sensitive%n: %n%ex
+    </Property>
+  </Properties>
+
+  <Appenders>
+    <!-- Rolling File Appender -->
+    <RollingFile
+      name="FileAppender"
+      fileName="${LOG_PATH}/test.log"
+      filePattern="${LOG_ARCHIVE}/shiftleft.%d{yyyy-MM-dd}.%i.log">
+      <PatternLayout>
+        <Pattern>${LOG_PATTERN}</Pattern>
+      </PatternLayout>
+      <Policies>
+        <TimeBasedTriggeringPolicy interval="1"/>
+        <SizeBasedTriggeringPolicy size="10MB"/>
+      </Policies>
+      <DefaultRolloverStrategy max="10"/>
+    </RollingFile>
+
+    <Console name="ConsoleAppender" target="SYSTEM_OUT" follow="true">
+      <PatternLayout>
+        <Pattern>${LOG_PATTERN}</Pattern>
+      </PatternLayout>
+    </Console>
+
+  </Appenders>
+
+  <Loggers>
+
+    <Logger name="io.shiftleft" additivity="false" level="DEBUG">
+      <AppenderRef ref="ConsoleAppender"/>
+      <AppenderRef ref="FileAppender"/>
+    </Logger>
+
+    <Root level="debug">
+      <AppenderRef ref="ConsoleAppender"/>
+      <AppenderRef ref="FileAppender"/>
+    </Root>
+  </Loggers>
+</Configuration>
