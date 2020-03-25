@@ -1,0 +1,43 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: false
+    goals: 'compile'
+- script: docker pull quay.io/appthreat/sast-scan
+  displayName: "ShiftLeft Scan"
+- script: |
+    docker run -e "WORKSPACE=https://github.com/ShiftLeftSecurity/tarpit-java/blob/$(Build.SourceVersion)" \
+      -e "REPOSITORY_URL=$(Build.Repository.Uri)" \
+      -e "COMMIT_SHA=$(Build.SourceVersion)" \
+      -e "GITHUB_TOKEN=$(GITHUB_TOKEN)" \
+      -e "BRANCH=$(Build.SourceBranch)" \
+      -v $(Build.SourcesDirectory):/app \
+      -v $(Build.ArtifactStagingDirectory):/reports \
+      quay.io/appthreat/sast-scan scan --src /app \
+      --out_dir /reports/CodeAnalysisLogs
+  displayName: "Perform ShiftLeft scan"
+  continueOnError: "true"
+# To integrate with the SARIF Azure DevOps Extension it is necessary to publish the CodeAnalysisLogs folder
+# as an artifact with the same name
+- task: PublishBuildArtifacts@1
+  displayName: "Publish analysis logs"
+  inputs:
+    PathtoPublish: "$(Build.ArtifactStagingDirectory)/CodeAnalysisLogs"
+    ArtifactName: "CodeAnalysisLogs"
+    publishLocation: "Container"
