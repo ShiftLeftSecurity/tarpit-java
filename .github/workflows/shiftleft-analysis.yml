@@ -21,12 +21,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    # Instructions
-    # 1. Setup JDK, Node.js, Python etc depending on your project type
-    # 2. Compile or build the project before invoking scan
-    #    Example: mvn compile, or npm install or pip install goes here
-    # 3. Invoke ShiftLeft Scan with the github token. Leave the workspace empty to use relative url
-
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Build with Maven
+      run: mvn compile
     - name: Perform ShiftLeft Scan
       uses: ShiftLeftSecurity/scan-action@master
       env:
