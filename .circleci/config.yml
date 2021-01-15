@@ -39,7 +39,7 @@ jobs:
                     curl https://www.shiftleft.io/download/sl-latest-linux-x64.tar.gz > /tmp/sl.tar.gz && sudo tar -C /usr/local/bin -xzf /tmp/sl.tar.gz
                     PR_USER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f4)
                     PR_REPO=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f5) 
-                    PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f7) 
+                    PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f7)
                     sl analyze --wait --tag branch=$CIRCLE_BRANCH --app tarpit-java-circle /tmp/workspace/target/tarpit-java.war
                     sl check-analysis --app tarpit-java-circle --report --source=tag.branch=master --target=tag.branch=$CIRCLE_BRANCH --github-pr-user=$PR_USER --github-pr-repo=$PR_REPO --github-pr-number=$PR_NUMBER --github-token=$GH_AUTH_TOKEN
              
