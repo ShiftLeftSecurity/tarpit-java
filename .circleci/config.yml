@@ -35,14 +35,14 @@ jobs:
                 command: |
                     mvn clean package
                     mkdir -p /tmp/workspace/target
-                    mv target/hello-shiftleft-0.0.1.jar /tmp/workspace/target/
+                    mv target/tarpit-java.war /tmp/workspace/target/
                     cp uat.sh /tmp/workspace/target
                     curl https://www.shiftleft.io/download/sl-latest-linux-x64.tar.gz > /tmp/sl.tar.gz && sudo tar -C /usr/local/bin -xzf /tmp/sl.tar.gz
                     PR_USER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f4)
                     PR_REPO=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f5) 
                     PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f7) 
-                    sl analyze --wait --tag branch=$CIRCLE_BRANCH --app Docker_Demo_App /tmp/workspace/target/hello-shiftleft-0.0.1.jar
-                    sl check-analysis --app Docker_Demo_App --report --source=tag.branch=master --target=tag.branch=$CIRCLE_BRANCH --github-pr-user=$PR_USER --github-pr-repo=$PR_REPO --github-pr-number=$PR_NUMBER --github-token=$GH_AUTH_TOKEN
+                    sl analyze --wait --tag branch=$CIRCLE_BRANCH --app Docker_Demo_App /tmp/workspace/target/tarpit-java.war
+                    sl check-analysis --app tarpit-java-circle --report --source=tag.branch=master --target=tag.branch=$CIRCLE_BRANCH --github-pr-user=$PR_USER --github-pr-repo=$PR_REPO --github-pr-number=$PR_NUMBER --github-token=$GH_AUTH_TOKEN
              
 workflows:
     version: 2
