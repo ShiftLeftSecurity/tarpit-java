@@ -36,7 +36,6 @@ jobs:
                     mvn clean package
                     mkdir -p /tmp/workspace/target
                     mv target/tarpit-java.war /tmp/workspace/target/
-                    cp uat.sh /tmp/workspace/target
                     curl https://www.shiftleft.io/download/sl-latest-linux-x64.tar.gz > /tmp/sl.tar.gz && sudo tar -C /usr/local/bin -xzf /tmp/sl.tar.gz
                     PR_USER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f4)
                     PR_REPO=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f5) 
