@@ -45,7 +45,8 @@ jobs:
         docker:
             - image: circleci/openjdk:8-jdk-node
         working_directory: ~/repo   
-        steps:       
+        steps:
+            - *attach_workspace
             - run:
                 name: Check SAST Analysis
                 command: |
