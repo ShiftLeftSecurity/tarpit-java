@@ -35,7 +35,7 @@ jobs:
                 command: |
                     mvn clean package
                     mkdir -p /tmp/workspace/target
-                    mv target/hello-shiftleft-0.0.1.jar /tmp/workspace/target/
+                    mv target/hello-shiftleft-*.jar /tmp/workspace/target/
                     cp uat.sh /tmp/workspace/target
                     curl https://www.shiftleft.io/download/sl-latest-linux-x64.tar.gz > /tmp/sl.tar.gz && sudo tar -C /usr/local/bin -xzf /tmp/sl.tar.gz
                     PR_USER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f4)
