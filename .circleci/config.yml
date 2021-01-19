@@ -43,22 +43,34 @@ jobs:
                     PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f7) 
                     sl analyze --wait --tag branch=$CIRCLE_BRANCH --app Docker_Demo_App /tmp/workspace/target/hello-shiftleft-*.jar
 
-            # Check scan for new violations if not on main
-            - when:
-                condition:
-                   and:
-                     - equal: [ main, << pipeline.git.branch >> ]
-                steps:
-                  - run:
-                    name: 
-                      command: |
-                        PR_USER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f4)
-                        PR_REPO=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f5) 
-                        PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f7) 
-                        sl check-analysis --app Docker_Demo_App --report --source=tag.branch=master --target=tag.branch=$CIRCLE_BRANCH --github-pr-user=$PR_USER --github-pr-repo=$PR_REPO --github-pr-number=$PR_NUMBER --github-token=$GH_AUTH_TOKEN
-             
+    test:
+        docker:
+            - image: circleci/openjdk:8-jdk-node
+        working_directory: ~/repo   
+        steps:       
+            - run:
+                name: Check SAST Analysis
+                command: |
+                    PR_USER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f4)
+                    PR_REPO=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f5) 
+                    PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f7) 
+                    sl check-analysis --app Docker_Demo_App --report --source=tag.branch=master --target=tag.branch=$CIRCLE_BRANCH --github-pr-user=$PR_USER --github-pr-repo=$PR_REPO --github-pr-number=$PR_NUMBER --github-token=$GH_AUTH_TOKEN
+
+
 workflows:
-    version: 2
-    build_and_test:
-        jobs:
+  version: 2
+  build-test:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - develop
+                - /feature-.*/
+      - test:
+          requires:
             - build
+          filters:
+            branches:
+              ignore: 
+                - main
