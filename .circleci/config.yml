@@ -39,7 +39,7 @@ jobs:
                     PR_USER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f4)
                     PR_REPO=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f5) 
                     PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f7) 
-                    sl analyze --wait --tag branch=$CIRCLE_BRANCH -- policy first_poliocy --app tarpit-java-circle /home/circleci/repo/target/tarpit-java.war
+                    sl analyze --wait --tag branch=$CIRCLE_BRANCH --policy first_policy --app tarpit-java-circle /home/circleci/repo/target/tarpit-java.war
 
     test:
         docker:
