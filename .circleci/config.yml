@@ -39,7 +39,7 @@ jobs:
                     PR_USER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f4)
                     PR_REPO=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f5) 
                     PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f7) 
-                    sl analyze --wait --tag branch=$CIRCLE_BRANCH --app Docker_Demo_App /home/circleci/repo/target/tarpit-java.war
+                    sl analyze --wait --tag branch=$CIRCLE_BRANCH -- policy first_poliocy --app tarpit-java-circle /home/circleci/repo/target/tarpit-java.war
 
     test:
         docker:
@@ -53,7 +53,7 @@ jobs:
                     PR_USER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f4)
                     PR_REPO=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f5) 
                     PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f7) 
-                    sl check-analysis --app Docker_Demo_App --report --source=tag.branch=master --target=tag.branch=$CIRCLE_BRANCH --github-pr-user=$PR_USER --github-pr-repo=$PR_REPO --github-pr-number=$PR_NUMBER --github-token=$GH_AUTH_TOKEN
+                    sl check-analysis --app tarpit-java-circle --report --source=tag.branch=master --target=tag.branch=$CIRCLE_BRANCH --github-pr-user=$PR_USER --github-pr-repo=$PR_REPO --github-pr-number=$PR_NUMBER --github-token=$GH_AUTH_TOKEN
 
 
 workflows:
