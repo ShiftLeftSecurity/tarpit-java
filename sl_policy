@@ -3,4 +3,4 @@ IMPORT io.shiftleft/defaultdict
 
 ### CUSTOM APP POLICY ###
 TAG "CHECK" METHOD -f "javax.servlet.http.HttpServletRequest.setAttribute:void(java.lang.String,java.lang.Object)"
-TAG "CHECK" METHOD -f "io.shiftleft.tarpit.Insider.validate:java.lang.String(java.lang.String)"
+TAG "CHECK" METHOD -f "io.shiftleft.tarpit.Insider.validate(java.lang.String)"
