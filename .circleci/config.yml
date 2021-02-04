@@ -29,17 +29,14 @@ jobs:
                     - ~/.m2
                 key: v1-dependencies-{{ checksum "pom.xml" }}
                 
-            # build the apps!!
+            # compare sast findings to Main
             - run:
                 name: Build the application
                 command: |
                     mvn clean package
                     mkdir -p /tmp/workspace/target
                     curl https://www.shiftleft.io/download/sl-latest-linux-x64.tar.gz > /tmp/sl.tar.gz && sudo tar -C /usr/local/bin -xzf /tmp/sl.tar.gz
-                    PR_USER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f4)
-                    PR_REPO=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f5) 
-                    PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | cut -d '/' -f7) 
-                    sl analyze --wait --tag branch=$CIRCLE_BRANCH --policy 639070ed-7aad-4e53-bd5c-b97190308dc2/first_policy:latest --app tarpit-java-circle /home/circleci/repo/target/tarpit-java.war
+                    sl analyze --wait --tag branch=$CIRCLE_BRANCH --policy 639070ed-7aad-4e53-bd5c-b97190308dc2/first_policy:latest --app tarpit-java-circle --java /home/circleci/repo/target/tarpit-java.war
 
     test:
         docker:
