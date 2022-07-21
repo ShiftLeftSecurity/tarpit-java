@@ -1,4 +1,7 @@
-on: [ master ]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   zap_scan:
